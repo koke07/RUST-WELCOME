@@ -1,86 +1,88 @@
 use regex::Regex;
-/*fn main() {
-    let nombre: &str ="Jorge";
-    let edad:i8 = 22;
-    let temp_max:i16 =19;
-    let temp_min:i16 = 7;
-    saludo(nombre,edad);
-    temperatura(temp_max, temp_min)
-}
-
-fn saludo(nombre: &str, edad:i8){
-     println!("Hola {}, me encanta tu código!",nombre);
-     println!("{}, tu edad es {}", nombre,edad) 
-}
-
-fn temperatura(temp_max:i16, temp_min:i16){
-    println!("La temperatura máxima en Bogotá es {}° y la mínima es {}°",temp_max,temp_min);
-}*/
-/*fn main(){
-    println!("Happy coding, ingresa por favor tu nombre: ");
-    //let mut nombre: String = String::from("Jorge"); 
-    let mut nombre: String = String::new(); 
-    std::io::stdin().read_line(&mut nombre).unwrap();
-    nombre = nombre.trim().to_string();
-    //libreria estandar , input and output,std in para informacion, leer datos desde la consola,se van a guardar en nombrar , es para manejar errores
-    print!("Hola, bienvenid@ {}", nombre);
-    edad()
-} */
-
-/*fn edad(){
-    println!("Happy coding, ingresa por favor tu edad: ");
-    //obtener la edad de la consola 
-    let mut edad: String = String::new(); 
-    std::io::stdin().read_line(&mut edad).unwrap();
-    // convertirla a numero
-
-    let edad_int: u8 = edad.trim().parse().unwrap();
-
-    if edad_int <= 18{
-        println!("Eres menor de edad, no puedes ingresar a la Disco");
-    }
-    else{
-       print!("Hola bienvenido a la Disco, edad {} años", edad_int); 
-    }
-
-
+fn main() {
+    print!("Hola, Bienvenido a mi calculadora!\n");
+    // expresiones regulares que vamos a utilizar
+    let re_add = Regex::new(r"(\d+)\s?\+\s?(\d+)").unwrap();
+    let re_rest = Regex::new(r"(\d+)\s?\-\s?(\d+)").unwrap();
+    let re_mult = Regex::new(r"(\d+)\s?\*\s?(\d+)").unwrap();
+    let re_mult = Regex::new(r"(\d+)\s?/\s?(\d+)").unwrap();
     
-}*/
+
+    // datos del usuario que vamos a utilizar
+    print!("Por favor , indica su expresion!\n");
+    let mut expresion = String::new();
+    std::io::stdin().read_line(&mut expresion).unwrap();
+    // aplicar operaciones
+
+    //multiplicacion
+    loop {
+        let caps = re_mult.captures(&expresion);
+        if caps.is_none(){
+            break;
+        }
+        let caps = caps.unwrap();
 
 
+        let cap_expression= caps.get(0).unwrap().as_str();
+        let left_value: i32 = caps.get(1).unwrap().as_str().parse().unwrap();
+        let right_value: i32 = caps.get(2).unwrap().as_str().parse().unwrap();
 
-fn main(){
-   //form_foraneo();
-   //edad();
-   pildoras();
-}
-
-/*fn form_foraneo(){
-    println!("Happy coding, ingresa por favor tu nombre: ");
-    let mut nombre: String = String::new();
-    std::io::stdin().read_line(&mut nombre).unwrap();
-    nombre = nombre.trim().to_string();
-    println!("Happy coding, ingresa por favor tu pais de origen: ");
-    let mut pais: String = String::new();
-    std::io::stdin().read_line(&mut pais).unwrap();
-    pais = pais.trim().to_string();
-    print!("Hola, bienvenido {} tu pais de origen es {} ", nombre,pais);
-}*/
-
-fn pildoras(){
-    println!("Hola bienvenido, que pastillas desea tomar, azul o roja?");
-    let mut pastillas: String = String::new();
-    std::io::stdin().read_line(&mut pastillas).unwrap();
-    pastillas = pastillas.trim().to_lowercase();
-
-    if pastillas == "azul"{
-        println!("Felicidades, usted elijio pastillas azules")
+        let mult = left_value * right_value;
+        expresion = expresion.replace(cap_expression, &mult.to_string());
+        
+        print!("{:?}izq,{:?}der", left_value, right_value);
     }
-    else if pastillas == "roja"{
-        println!("Felicidades, usted elijio pastillas rojas")
+    // suma 
+
+    loop {
+        let caps = re_add.captures(&expresion);
+        if caps.is_none(){
+            break;
+        }
+        let caps = caps.unwrap();
+
+
+        let cap_expression= caps.get(0).unwrap().as_str();
+        let left_value: i32 = caps.get(1).unwrap().as_str().parse().unwrap();
+        let right_value: i32 = caps.get(2).unwrap().as_str().parse().unwrap();
+
+        let addition = left_value + right_value;
+        expresion = expresion.replace(cap_expression, &addition.to_string());
+        
+        print!("{:?}izq,{:?}der", left_value, right_value);
     }
-    else{
-        println!("Lo sentimos, no tenemos esa pastilla")
+    //resta
+    loop{
+        let caps = re_rest.captures(&expresion);
+        if caps.is_none(){
+            break;
+        }
+        let caps = caps.unwrap();
+        let cap_expression= caps.get(0).unwrap().as_str();
+        let left_value: i32 = caps.get(1).unwrap().as_str().parse().unwrap();
+        let right_value: i32 = caps.get(2).unwrap().as_str().parse().unwrap();
+
+        let rest = left_value - right_value;
+        expresion = expresion.replace(cap_expression, &rest.to_string());
+        
+        print!("{:?}izq,{:?}der", left_value, right_value);
     }
-    
+    //division
+    loop{
+        let caps = re_rest.captures(&expresion);
+        if caps.is_none(){
+            break;
+        }
+        let caps = caps.unwrap();
+        let cap_expression= caps.get(0).unwrap().as_str();
+        let left_value: i32 = caps.get(1).unwrap().as_str().parse().unwrap();
+        let right_value: i32 = caps.get(2).unwrap().as_str().parse().unwrap();
+
+        let div = left_value / right_value;
+        expresion = expresion.replace(cap_expression, &div.to_string());
+    }
+
+
+    // mostrar nuestro resultado
+    print!("El resultado de la operacion es:{}",expresion);
 }
